@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="da" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Rejsetilbud</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+
+      body { margin:0; padding:0; background:#fcf5f5; }
+      table { border-collapse:collapse; }
+      a { color:#1c1c1c; text-decoration:none; }
+
+      /* Typografi */
+      .heading { font-family:'Playfair Display', Georgia, serif; color:#1c1c1c; }
+      .text { font-family:'TeX Gyre Termes','Times New Roman',serif; color:#1c1c1c; font-size:15px; line-height:24px; }
+      .gold { color:#9d8665; }
+      .section-title { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:18px; font-weight:700; text-transform:uppercase; color:#9d8665; }
+      .hotel-title { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:15px; line-height:1.2; font-weight:700; color:#9d8665; }
+
+      .card { border:1px solid #e7e2da; border-radius:12px; background:#fff; }
+      .muted { color:#6a6a6a; font-size:12px; line-height:18px; }
+      .tight td { padding:6px 0; border-top:1px solid #f0ece4; }
+      .col { vertical-align:top; }
+
+      /* Fly – smal venstrestillet */
+      .flight-inner { max-width:440px; padding:18px; }
+      .journey-title { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:16px; font-weight:700; text-transform:uppercase; color:#9d8665; margin:0 0 12px; }
+      .chip { display:block; padding:2px 10px; border:1px solid #e7e2da; border-radius:999px; font-size:12px; line-height:18px; margin:0 0 6px 0; }
+      .leg { margin:0 0 16px 0; }
+      .times { display:block; font-weight:700; font-size:15px; line-height:1.4; font-variant-numeric: tabular-nums; margin:0; }
+      .layover { position:relative; margin:10px 0 14px 0; }
+      .layover:before { content:""; position:absolute; left:0; right:0; top:50%; border-top:1px dashed #e9e2d6; }
+      .layover span { position:relative; background:#fff; padding:0 10px 0 0; font-size:12px; color:#6a6a6a; white-space:nowrap; }
+      .journey-sep { margin:14px 0; border-top:1px solid #f0ece4; }
+      .journey-foot { font-size:12px; color:#6a6a6a; margin-top:6px; }
+      .plus1 { font-size:10px; vertical-align:super; color:#9d8665; font-weight:700; margin-left:2px; }
+
+      /* ——— Rejseplan med 2 hoteller ——— */
+      .itinerary { max-width:520px; padding:18px; }
+      .stay { display:grid; grid-template-columns:20px 1fr; column-gap:12px; row-gap:6px; padding:12px 0; position:relative; }
+      .stay + .stay { border-top:1px solid #f0ece4; }
+      .mark { position:relative; }
+      .mark:before { content:""; position:absolute; left:8px; top:0; bottom:0; width:1px; background:#e7e2da; }
+      .dot { position:absolute; left:3px; top:6px; width:10px; height:10px; border-radius:999px; background:#9d8665; }
+      .stay-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+      .dates { font-weight:700; font-variant-numeric:tabular-nums; }
+      .nights { display:inline-block; padding:2px 8px; border:1px solid #e7e2da; border-radius:999px; font-size:12px; line-height:16px; color:#6a6a6a; }
+      .stay-hotel { font-weight:700; color:#9d8665; }
+      .badges { margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; }
+      .badge { font-size:12px; line-height:16px; padding:2px 8px; border:1px solid #e7e2da; border-radius:999px; color:#6a6a6a; }
+      .stay p { margin:4px 0 0; }
+
+      /* Totalpris kort */
+      .total-card { border:1px solid #d7cbbb; background:#faf7f2; border-radius:12px; padding:16px 18px; }
+      .total-line { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+      .total-label { font-weight:700; color:#9d8665; text-transform:uppercase; letter-spacing:.3px; }
+      .total-amount { font-weight:700; font-size:18px; }
+
+      /* MOBILE */
+      @media only screen and (max-width:600px) {
+        .wrap { width:100% !important; }
+        .px { padding-left:20px !important; padding-right:20px !important; }
+        .stack { display:block !important; width:100% !important; }
+        .col { width:100% !important; }
+        .flight-inner { max-width:100%; }
+        .itinerary { max-width:100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <table role="presentation" width="100%" bgcolor="#fcf5f5">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="680" class="wrap" bgcolor="#ffffff" style="border:1px solid #e7e2da; border-radius:14px; overflow:hidden;">
+
+            <!-- HEADER -->
+            <tr>
+              <td style="padding:24px 28px; border-bottom:1px solid #e7e2da;">
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td align="left" class="center" style="font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:16px; color:#1c1c1c;">Makai Travels – Beyond Excellence</td>
+                    <td align="right" class="center" style="font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:12px; color:#6a6a6a;">
+                      <span class="gold">Travel Designer</span><br>Rasmus Kirketerp<br>
+                      <a href="mailto:rk@makaitravels.dk" style="color:#9d8665;">rk@makaitravels.dk</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- HERO -->
+            <tr>
+              <td style="padding:36px 40px 20px;" class="px">
+                <div class="heading" style="font-size:28px; font-weight:700;">✦ REJSETILBUD TIL MAGISKE OMAN ✦</div>
+                <div class="text" style="margin-top:6px; color:#6a6a6a;">03.–14. november 2025 &nbsp;•&nbsp; 10 nætter / 12 dage</div>
+              </td>
+            </tr>
+
+            <!-- FLY -->
+            <tr><td style="padding:0 40px 12px;" class="px"><div class="section-title">Flyrejse</div></td></tr>
+            <tr>
+              <td style="padding:0 40px 16px;" class="px">
+                <table role="presentation" width="100%" class="card">
+                  <tr><td>
+                    <div class="flight-inner">
+                      <!-- Udrejse -->
+                      <div class="journey-title">Udrejse – Mandag 03.11.2025</div>
+                      <div class="leg"><div class="chip">BLL → IST</div><div class="times">17:50 – 23:15</div></div>
+                      <div class="layover"><span>Mellemlanding i Istanbul • 2t 05m</span></div>
+                      <div class="leg"><div class="chip">IST → MCT</div><div class="times">01:20<sup class="plus1">+1</sup> – 07:10<sup class="plus1">+1</sup></div></div>
+                      <div class="journey-foot">Samlet rejsetid udrejse: 10t 20m</div>
+
+                      <div class="journey-sep"></div>
+
+                      <!-- Hjemrejse -->
+                      <div class="journey-title">Hjemrejse – Fredag 14.11.2025</div>
+                      <div class="leg"><div class="chip">BLL → IST</div><div class="times">08:10 – 12:50</div></div>
+                      <div class="layover"><span>Mellemlanding i Istanbul • 2t 35m</span></div>
+                      <div class="leg"><div class="chip">IST → BLL</div><div class="times">15:25<sup class="plus1">+1</sup> – 16:55<sup class="plus1">+1</sup></div></div>
+                      <div class="journey-foot">Samlet rejsetid hjemrejse: 11t 45m</div>
+                    </div>
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+
+<!-- REJSEPLAN & HOTELLER (2 ophold) -->
+<tr><td style="padding:0 40px 12px;" class="px"><div class="section-title">Rejseplan & hoteller</div></td></tr>
+<tr>
+  <td style="padding:0 40px 20px;" class="px">
+    <table role="presentation" width="100%" class="card">
+      <tr><td>
+        <div class="itinerary">
+
+          <!-- Ophold #1 -->
+          <div class="stay">
+            <div class="mark"><span class="dot"></span></div>
+            <div>
+              <div class="stay-head">
+                <span class="dates">04.–09. november</span>
+                <span class="nights">5 nætter</span>
+                <span class="stay-hotel"><a href="#" target="_blank" style="color:inherit; text-decoration:none;">Al Bustan Palace, Ritz-Carlton 5★</a></span>
+              </div>
+              <div class="badges">
+                <span class="badge">2x Deluxe Lagoon Access</span>
+                <span class="badge">Morgenmad</span>
+                <span class="badge">Privat transfer</span>
+              </div>
+              <!-- Hotel-link -->
+              <div style="margin-top:6px;">
+                <a href="https://www.ritzcarlton.com/en/hotels/mctrz-al-bustan-palace-a-ritz-carlton-hotel/overview/"
+                   target="_blank" style="color:#9d8665; text-decoration:underline;">
+                  Se hotellet →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ophold #2 -->
+          <div class="stay">
+            <div class="mark"><span class="dot"></span></div>
+            <div>
+              <div class="stay-head">
+                <span class="dates">11.–15. marts</span>
+                <span class="nights">4 nætter</span>
+                <span class="stay-hotel"><a href="#" target="_blank" style="color:inherit; text-decoration:none;">W Muscat Bay 5★</a></span>
+              </div>
+              <div class="badges">
+                <span class="badge">2x Wonderful Room</span>
+                <span class="badge">Morgenmad</span>
+                <span class="badge">Privat transfer</span>
+              </div>
+              <!-- Hotel-link -->
+              <div style="margin-top:6px;">
+                <a href="https://www.marriott.com/en-us/hotels/mctwh-w-muscat/overview/"
+                   target="_blank" style="color:#9d8665; text-decoration:underline;">
+                  Se hotellet →
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </td></tr>
+    </table>
+  </td>
+</tr>
+
+            <!-- TILVALG: HALVPENSION -->
+<tr><td style="padding:0 40px 12px;" class="px"><div class="section-title">Tilvalg: Halvpension</div></td></tr>
+<tr>
+  <td style="padding:0 40px 28px;" class="px">
+    <table role="presentation" width="100%" class="card">
+      <tr>
+        <td style="padding:14px 18px;">
+          <table role="presentation" width="100%" class="text" style="margin-top:12px;">
+            <tr class="tight">
+              <td><strong><span class="gold">Al Bustan Palace, Ritz-Carlton</span></strong> – Halvpension (5 nætter)</td>
+              <td align="right"><strong>DKK 12.600,-</strong></td>
+            </tr>
+            <tr class="tight">
+              <td><strong><span class="gold">W Muscat Bay</span></strong> – Halvpension (5 nætter)</td>
+              <td align="right"><strong>DKK DKK 8.000,-</strong></td>
+            </tr>
+          </table>
+          <div class="muted" style="margin-top:8px;">
+            Priserne er totalt for hele opholdet på det enkelte hotel og kan ændre sig frem til endelig bestilling.
+          </div>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+            <!-- TOTALPRIS -->
+            <tr>
+              <td style="padding:0 40px 28px;" class="px">
+                <div class="total-card">
+                  <div class="total-line text">
+                    <span class="total-label">Totalpris for 4 voksne / 1 barn / 1 spædbarn</span>
+                    <span class="total-amount">DKK 91.900,-</span>
+                  </div>
+                  <div class="muted" style="margin-top:6px;">
+                    Inkl. fly t/r, alle nævnte transfers, ophold og måltider jf. rejseplanen samt skatter/afgifter. Med forbehold for prisændringer og tilgængelighed.
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- INKLUSIONER -->
+            <tr><td style="padding:0 40px 12px;" class="px"><div class="section-title">Rejsens inklusioner</div></td></tr>
+            <tr>
+              <td style="padding:0 40px 28px;" class="px">
+                <table role="presentation" width="100%" class="card">
+                  <tr><td style="padding:16px 18px;" class="text">
+                    • Fly ml. Billund og Muscat t/r<br>
+                    • Private transfers på alle strækninger<br>
+                    • 10 nætter fordelt på hotellerne jf. rejseplanen<br>
+                    • Måltider som anført ved hvert ophold<br>
+                    • Obligatoriske skatter og afgifter
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- CTA -->
+            <tr>
+              <td align="center" style="padding:0 40px 36px;" class="px">
+                <a href="mailto:rk@makaitravels.dk?subject=Rejsetilbud%20til%20magiske%20Oman"
+                   style="display:inline-block; padding:14px 24px; border:1px solid #9d8665; border-radius:999px; font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:13px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:#1c1c1c;">
+                  Bestil / Justér rejsetilbuddet
+                </a>
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td style="padding:18px 28px; border-top:1px solid #e7e2da;" class="text" align="center" style="font-size:12px; color:#6a6a6a;">
+                © Makai Travels – En del af The Makai Travel Group
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
