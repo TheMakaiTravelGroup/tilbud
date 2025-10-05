@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="da" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Rejsetilbud</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+
+      /* Fix til mobile klienter der auto-forstørrer tekst */
+      body, table, td, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+
+      body { margin:0; padding:0; background:#fcf5f5; }
+      table { border-collapse:collapse; }
+      a { color:#1c1c1c; text-decoration:none; }
+
+      /* Typografi */
+      .heading { font-family:'Playfair Display', Georgia, serif; color:#1c1c1c; }
+      .text { font-family:'TeX Gyre Termes','Times New Roman',serif; color:#1c1c1c; font-size:15px; line-height:24px; }
+      .gold { color:#9d8665; }
+      .hotel-title { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:15px; line-height:1.2; font-weight:700; color:#9d8665; }
+
+      .card { border:1px solid #e7e2da; border-radius:12px; background:#fff; }
+      .col { vertical-align:top; }
+      .muted { color:#6a6a6a; font-size:12px; line-height:18px; }
+      .tight td { padding:6px 0; border-top:1px solid #f0ece4; }
+
+      /* ENS LUFT VED ALLE SEKTIONSOVERSKRIFTER (samme over/under) */
+      .section-title{
+        font-family:'TeX Gyre Termes','Times New Roman',serif;
+        font-size:18px; font-weight:700; text-transform:uppercase; color:#9d8665;
+        position:relative;
+        margin:16px 0 16px;
+        padding-top:16px;
+      }
+      .section-title:before{
+        content:""; position:absolute; top:0; left:0; width:56px; height:2px; background:#9d8665;
+      }
+
+      /* FLY: venstrestillet, luftig og smal */
+      .flight-inner { max-width:440px; padding:18px; }
+      .journey-title { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:16px; font-weight:700; text-transform:uppercase; color:#9d8665; margin:0 0 12px; }
+      .chip { display:block; padding:2px 10px; border:1px solid #e7e2da; border-radius:999px; font-size:12px; line-height:18px; margin:0 0 6px 0; }
+      .leg { margin:0 0 16px 0; }
+      .times { display:block; font-weight:700; font-size:15px; line-height:1.4; font-variant-numeric: tabular-nums; margin:0; }
+
+      /* NYT: flyselskab + flightnr-linje under tiderne */
+      .flight-meta { display:block; font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:13px; line-height:20px; color:#6a6a6a; margin-top:2px; }
+
+      .layover { position:relative; margin:10px 0 14px 0; }
+      .layover:before { content:""; position:absolute; left:0; right:0; top:50%; border-top:1px dashed #e9e2d6; }
+      .layover span { position:relative; background:#fff; padding:0 10px 0 0; font-size:12px; color:#6a6a6a; white-space:nowrap; }
+      .journey-sep { margin:14px 0; border-top:1px solid #f0ece4; }
+      .journey-foot { font-size:12px; color:#6a6a6a; margin-top:6px; }
+      .plus1 { font-size:10px; vertical-align:super; color:#9d8665; font-weight:700; margin-left:2px; }
+
+      /* Lange hotelkort i én kolonne */
+      .hotel-long { padding:16px 18px; }
+      .hotel-cap { font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:15px; font-weight:700; color:#9d8665; letter-spacing:.2px; }
+      .rate-list { width:100%; margin-top:12px; }
+      .rate-list td { vertical-align:top; }
+      .rate-list td:first-child { padding-right:12px; }
+      .rate-list tr:first-child td { border-top:0; }
+      .hotel-link a { color:#9d8665; text-decoration:underline; }
+      .hotel-link { margin-top:8px; }
+      .hotel-long + .hotel-long { margin-top:16px; }
+
+      /* Meal plan badges – premium */
+      .mp{
+        display:inline-block; padding:3px 10px; margin-left:8px;
+        border:1px solid #e7e2da; border-radius:999px;
+        font-size:12px; line-height:16px; font-weight:700;
+        color:#1c1c1c; white-space:nowrap;
+      }
+      .mp--ai{ background:#c4dad6; border-color:#9d8665; }
+      .mp--hb{ background:#e7e2da; border-color:#9d8665; }
+      .mp--bb{ background:#ffffff; border-color:#e7e2da; }
+      .mp--ro{ background:#1c1c1c; color:#e7e2da; border-color:#1c1c1c; }
+
+      /* TRANSFER-badges (NYT) */
+      .hotel-meta{ margin-top:8px; }
+      .tr{
+        display:inline-block; padding:3px 10px;
+        border:1px solid #e7e2da; border-radius:999px;
+        font-size:12px; line-height:16px; font-weight:700;
+        color:#1c1c1c; background:#fff; white-space:nowrap;
+      }
+      .tr:before{
+        content:""; display:inline-block; width:6px; height:6px;
+        border-radius:999px; background:#9d8665;
+        margin-right:6px; vertical-align:middle;
+      }
+
+      /* CTA */
+      .btn{
+        display:inline-block; padding:14px 24px; border:1px solid #9d8665; border-radius:999px;
+        background:#e7e2da; color:#1c1c1c; font-family:'TeX Gyre Termes','Times New Roman',serif;
+        font-size:13px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; text-decoration:none;
+      }
+
+      /* Kun mobil (fallback-tekst under knap) */
+      .mobile-only{ display:none; }
+      @media only screen and (max-width:600px) {
+        .wrap { width:100% !important; }
+        .px { padding-left:20px !important; padding-right:20px !important; }
+        .stack { display:block !important; width:100% !important; }
+        .col { width:100% !important; }
+        .flight-inner { max-width:100%; }
+
+        .heading{ font-size:24px !important; }
+        .section-title{ font-size:16px !important; }
+        .text{ font-size:14px !important; line-height:22px !important; }
+        .journey-title{ font-size:15px !important; }
+        .times{ font-size:14px !important; }
+        .chip{ font-size:11px !important; }
+        .hotel-cap{ font-size:14px !important; }
+
+        /* Match "fly" + "inklusioner"-tekst med hotellerne */
+        .flight-details,
+        .flight-details .times,
+        .inclusions,
+        .flight-meta {
+          font-size:13px !important;
+          line-height:20px !important;
+        }
+
+        .mobile-only{ display:block !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <table role="presentation" width="100%" bgcolor="#fcf5f5">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="680" class="wrap" bgcolor="#ffffff" style="border:1px solid #e7e2da; border-radius:14px; overflow:hidden;">
+
+            <!-- HEADER -->
+            <tr>
+              <td style="padding:24px 28px; border-bottom:1px solid #e7e2da;">
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td align="left" class="center" style="font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:16px; color:#1c1c1c;">Maldivia - Beyond Excellence</td>
+                    <td align="right" class="center" style="font-family:'TeX Gyre Termes','Times New Roman',serif; font-size:12px; color:#6a6a6a;">
+                      <span class="gold">Travel Designer</span><br>Rasmus Kirketerp<br>
+                      <a href="mailto:rk@maldivia.dk" style="color:#9d8665;">rk@maldivia.dk</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- HERO -->
+            <tr>
+              <td style="padding:36px 40px 0;" class="px">
+                <div class="heading" style="font-size:28px; font-weight:700;">✦ REJSETILBUD TIL MALDIVERNE ✦</div>
+                <div class="text" style="margin-top:6px; color:#6a6a6a;">11. februar – 19. februar 2026 &nbsp;•&nbsp; 7 nætter / 9 dage</div>
+              </td>
+            </tr>
+
+            <!-- FLY -->
+            <tr><td style="padding:0 40px 0;" class="px"><div class="section-title">Flyrejse</div></td></tr>
+            <tr>
+              <td style="padding:0 40px 0;" class="px">
+                <table role="presentation" width="100%" class="card flight-details">
+                  <tr><td>
+                    <div class="flight-inner">
+                      <!-- UDREJSE -->
+                      <div class="journey-title">Udrejse – onsdag 11.02.2026</div>
+                      <div class="leg">
+                        <div class="chip">HAM → FRA</div>
+                        <div class="times">17:05 – 18:10</div>
+                        <span class="flight-meta">Lufthansa • DE 4178</span>
+                      </div>
+                      <div class="layover"><span>Mellemlanding i Frankfurt • 1 t 30 m</span></div>
+                      <div class="leg">
+                        <div class="chip">FRA → MLE</div>
+                        <div class="times">19:40 – 10:00<sup class="plus1">+1</sup></div>
+                        <span class="flight-meta">Condor • DE 2320</span>
+                      </div>
+                      <div class="journey-foot">Samlet rejsetid udrejse: 12 t 55 m</div>
+
+                      <div class="journey-sep"></div>
+
+                      <!-- HJEMREJSE -->
+                      <div class="journey-title">Hjemrejse – torsdag 19.02.2026</div>
+                      <div class="leg">
+                        <div class="chip">MLE → FRA</div>
+                        <div class="times">12:00 – 18:30</div>
+                        <span class="flight-meta">Condor • DE 2321</span>
+                      </div>
+                      <div class="layover"><span>Mellemlanding i Frankfurt • 1 t 25 m</span></div>
+                      <div class="leg">
+                        <div class="chip">FRA → HAM</div>
+                        <div class="times">19:55 – 20:55</div>
+                        <span class="flight-meta">Lufthansa • DE 4179</span>
+                      </div>
+                      <div class="journey-foot">Samlet rejsetid hjemrejse: 12 t 55 m</div>
+                    </div>
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- HOTELLER -->
+            <tr><td style="padding:0 40px 0;" class="px"><div class="section-title">Resorts & priser</div></td></tr>
+            <tr>
+              <td style="padding:0 40px 0;" class="px">
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="stack col">
+                      <!-- Hotel 1 -->
+                      <div class="hotel-long card text">
+                        <div class="hotel-cap">
+                          You & Me Maldives 4+★
+                          <span class="mp mp--ai">All-Inclusive Premium</span>
+                        </div>
+                        <table class="rate-list">
+                          <tr class="tight"><td>Lagoon Suite</td><td align="right"><strong>DKK 66.900,-</strong></td></tr>
+                        </table>
+                        <!-- Transfer-badge -->
+                        <div class="hotel-meta">
+                          <span class="tr">Transfer: Søfly (t/r, ca. 45 min.)</span>
+                        </div>
+                        <div class="hotel-link">
+                          <a href="https://www.thecocooncollection.com/youandmemaldives" target="_blank">Se hotellet →</a>
+                        </div>
+                      </div>
+
+                      <!-- Hotel 2 -->
+                      <div class="hotel-long card text">
+                        <div class="hotel-cap">
+                          Cora Cora Maldives 4+★
+                          <span class="mp mp--ai">Premium All-Inclusive</span>
+                        </div>
+                        <table class="rate-list">
+                          <tr class="tight"><td>Lagoon Villa</td><td align="right"><strong>DKK 67.900,-</strong></td></tr>
+                        </table>
+                        <!-- Transfer-badge -->
+                        <div class="hotel-meta">
+                          <span class="tr">Transfer: Søfly (t/r, ca. 45 min.)</span>
+                        </div>
+                        <div class="hotel-link">
+                          <a href="https://www.coracoraresorts.com/" target="_blank">Se hotellet →</a>
+                        </div>
+                      </div>
+
+                      <!-- Hotel 3 -->
+                      <div class="hotel-long card text">
+                        <div class="hotel-cap">
+                          Ananea Madivaru 5★
+                          <span class="mp mp--ai">Halvpension</span>
+                        </div>
+                        <table class="rate-list">
+                          <tr class="tight"><td>Water Pool Villa</td><td align="right"><strong>DKK 69.500,-</strong></td></tr>
+                        </table>
+                        <!-- Transfer-badge -->
+                        <div class="hotel-meta">
+                          <span class="tr">Transfer: Søfly (t/r, ca. 35 min.)</span>
+                        </div>
+                        <div class="hotel-link">
+                          <a href="https://www.ananeamadivaru.com/" target="_blank">Se hotellet →</a>
+                        </div>
+                      </div>
+
+                      <!-- Hotel 4 -->
+                      <div class="hotel-long card text">
+                        <div class="hotel-cap">
+                          Kuramathi Maldives 4+★
+                          <span class="mp mp--ai">Basic All-Inclusive</span>
+                        </div>
+                        <table class="rate-list">
+                          <tr class="tight">
+                            <td>Deluxe Water Villa</td>
+                            <td align="right"><strong>DKK 70.500,-</strong></td>
+                          </tr>
+                        </table>
+                        <!-- Transfer-badge -->
+                        <div class="hotel-meta">
+                          <span class="tr">Transfer: Søfly (ca. 20 min.) / Speedbåd (ca. 90 min.)</span>
+                        </div>
+                        <div class="hotel-link">
+                          <a href="https://www.kuramathi.com/" target="_blank">Se hotellet →</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- INKLUSIONER -->
+            <tr><td style="padding:0 40px 0;" class="px"><div class="section-title">Rejsetilbuddet inkluderer</div></td></tr>
+            <tr>
+              <td style="padding:0 40px 28px;" class="px">
+                <table role="presentation" width="100%" class="card">
+                  <tr><td style="padding:16px 18px;" class="text inclusions">
+                    • Fly mellem Hamborg og Malé t/r | Economy Class<br>
+                    • Transfer mellem Malé og resortet som vist under hvert resort t/r<br>
+                    • 7 nætter på det valgte resort<br>
+                    • Måltider som vist under "Resorts & Priser"<br>
+                    • Obligatoriske skatter og afgifter
+                  </td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- NOTE -->
+            <tr>
+              <td style="padding:0 40px 28px;" class="px text" align="left">
+                <em>Rejseforslaget er baseret på dagens priser og tilgængelighed, og priserne kan derfor stige, og fly/resorts blive udsolgt, før endelig bestilling. Tilbuddet gælder for 2 voksne.</em>
+              </td>
+            </tr>
+
+            <!-- CTA -->
+            <tr>
+              <td align="center" style="padding:0 40px 36px;" class="px">
+                <a
+                  href="mailto:rk@maldivia.dk?subject=Rejsetilbud%20til%20Maldiverne%20%7C%20Maldivia%20-%20Beyond%20Excellence"
+                  class="btn"
+                >
+                  Bestil / Justér rejsetilbuddet
+                </a>
+                <div class="muted mobile-only" style="margin-top:8px;">
+                  Virker knappen ikke? Skriv til
+                  <a href="mailto:rk@maldivia.dk">rk@maldivia.dk</a>.
+                </div>
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td style="padding:18px 28px; border-top:1px solid #e7e2da;" class="text" align="center" style="font-size:12px; color:#6a6a6a;">
+                © Maldivia – En del af The Makai Travel Group
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
